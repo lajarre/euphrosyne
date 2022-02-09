@@ -1,5 +1,4 @@
 from django.contrib.postgres.fields import ArrayField
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -64,12 +63,14 @@ class Run(TimestampedModel, MethodModel):
 
 class ObjectGroup(models.Model):
     label = models.CharField(
-        _("Group label"),
+        _("Label"),
         max_length=255,
-        blank=True,
+    )
+    object_count = models.PositiveIntegerField(
+        _("Number of objects"),
     )
     inventory = models.CharField(
-        _("Inventory"),
+        _("Inventory number"),
         max_length=255,
         blank=True,
     )
@@ -94,11 +95,9 @@ class ObjectGroup(models.Model):
     )
 
     def __str__(self) -> str:
-        label = (
-            self.object_set.first().label
-            if self.object_set.count() == 1
-            else f"(Group) {self.label}"
-        )
+        label = self.label
+        if self.object_count > 1:
+            label = "({}) {}".format(_("Group"), label)
         materials = ", ".join(self.materials)
 
         return f"{label} - {self.dating} - {materials}"
@@ -111,11 +110,6 @@ class ObjectGroup(models.Model):
 class Object(models.Model):
     group = models.ForeignKey(ObjectGroup, on_delete=models.CASCADE)
     label = models.CharField(_("Label"), max_length=255)
-    differentiation_information = models.CharField(
-        _("Differentiation information"),
-        max_length=255,
-        blank=True,
-    )
     inventory = models.CharField(
         _("Inventory"),
         max_length=255,
@@ -125,11 +119,4 @@ class Object(models.Model):
         _("Collection"),
         max_length=255,
         blank=True,
-    )
-    total_number = models.IntegerField(
-        _("Total number"),
-        null=True,
-        blank=True,
-        help_text=_("Number of objects if more than one"),
-        validators=[MinValueValidator(1)],
     )

@@ -1,5 +1,5 @@
 import enum
-from typing import Any, Dict, Mapping
+from typing import Any, Mapping
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -294,8 +294,8 @@ class RunStatusMemberForm(RunStatusBaseForm):
 
 
 class ObjectGroupAddChoices(enum.Enum):
-    OBJECT_GROUP = "OBJECT_GROUP", _("Group of objects")
     SINGLE_OBJECT = "SINGLE_OBJECT", _("One object")
+    OBJECT_GROUP = "OBJECT_GROUP", _("Group of objects")
 
     @classmethod
     def to_choices(cls):
@@ -307,49 +307,40 @@ class ObjectGroupForm(forms.ModelForm):
         label="",
         choices=ObjectGroupAddChoices.to_choices(),
         widget=widgets.ChoiceTag(),
+        required=False,
     )
 
     class Meta:
         model = ObjectGroup
-        fields = ("add_type", "label", "materials", "dating", "inventory", "collection")
+        fields = (
+            "add_type",
+            "label",
+            "object_count",
+            "dating",
+            "materials",
+            "discovery_place",
+            "inventory",
+            "collection",
+        )
         help_texts = {"materials": _("Separate each material with a comma")}
-        widgets = {"materials": widgets.TagsInput()}
+        widgets = {
+            "materials": widgets.TagsInput(),
+        }
 
     def __init__(self, *args, **kwargs: Mapping[str, Any]) -> None:
         super().__init__(*args, **kwargs)
         if self.instance.id:
-            self.fields["add_type"].required = False
             self.fields["add_type"].widget.attrs["disabled"] = "disabled"
-            self.fields["add_type"].initial = (
-                ObjectGroupAddChoices.OBJECT_GROUP.value[0]
-                if self.instance.object_set.count() > 1
-                else ObjectGroupAddChoices.SINGLE_OBJECT.value[0]
-            )
-            if self.instance.object_set.count() == 1:
-                self.fields["label"].widget = forms.HiddenInput()
-        else:
+        if self.instance and self.instance.object_set.exists():
             self.fields["add_type"].initial = ObjectGroupAddChoices.OBJECT_GROUP.value[
                 0
             ]
-
-    def clean(self) -> Dict[str, Any]:
-        cleaned_data = super().clean()
-        add_type = cleaned_data.get("add_type")
-        if add_type == ObjectGroupAddChoices.OBJECT_GROUP.value[
-            0
-        ] and not cleaned_data.get("label"):
-            raise ValidationError(
-                {
-                    "label": ValidationError(
-                        _(
-                            "Group label must be specified "
-                            "when adding multiple objects"
-                        ),
-                        code="label-required-for-mulitple-objects",
-                    )
-                }
-            )
-        return cleaned_data
+            self.fields["object_count"].initial = self.instance.object_set.count()
+        else:
+            self.fields["add_type"].initial = ObjectGroupAddChoices.SINGLE_OBJECT.value[
+                0
+            ]
+            self.fields["object_count"].initial = 1
 
 
 class BeamTimeRequestForm(ModelForm):

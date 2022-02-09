@@ -11,10 +11,23 @@ export default {
     main: [
       "promise-polyfill/src/polyfill",
       "whatwg-fetch",
+      "./euphrosyne/assets/css/base.css",
+    ],
+    "dsfr-style": [
       "@gouvfr/dsfr/dist/core/core.min.css",
       "@gouvfr/dsfr/dist/component/link/link.min.css",
+      "@gouvfr/dsfr/dist/component/button/button.min.css",
       "@gouvfr/dsfr/dist/component/tag/tag.min.css",
-      "./euphrosyne/assets/css/base.css",
+      "@gouvfr/dsfr/dist/component/accordion/accordion.min.css",
+    ],
+    "dsfr-module": [
+      "@gouvfr/dsfr/dist/core/core.module.min.js",
+      "@gouvfr/dsfr/dist/component/accordion/accordion.module.min.js",
+    ],
+    "dsfr-no-module": [
+      "@gouvfr/dsfr/dist/legacy/legacy.nomodule.min.js",
+      "@gouvfr/dsfr/dist/core/core.nomodule.min.js",
+      "@gouvfr/dsfr/dist/component/accordion/accordion.nomodule.min.js",
     ],
     ...Object.assign(
       {},

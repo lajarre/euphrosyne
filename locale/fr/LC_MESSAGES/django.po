@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-11 20:17+0100\n"
+"POT-Creation-Date: 2022-02-16 11:13+0100\n"
 "PO-Revision-Date: 2021-09-09 19:04+0200\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -219,18 +219,14 @@ msgstr "Seuls les utilisateurs Admin peuvent valider et exécuter des runs."
 msgid "Only Admin users might rewind runs."
 msgstr "Seuls les utilisateurs Admin peuvent remettre un run en arrière."
 
-msgid "Group of objects"
-msgstr "Groupe d'objets"
-
 msgid "One object"
 msgstr "Objet unique"
 
+msgid "Group of objects"
+msgstr "Groupe d'objets"
+
 msgid "Separate each material with a comma"
 msgstr "Séparez chaque matériau par une virgule"
-
-msgid "Group label must be specified when adding multiple objects"
-msgstr ""
-"L'intitulé de groupe doit etre spécifié lors d'un ajout de plusieurs objets"
 
 msgid "{} analysis technique"
 msgstr "technique d'analyse {}"
@@ -350,12 +346,15 @@ msgid "Beamline"
 msgstr "Ligne de faisceau"
 
 msgid "Object groups"
-msgstr "Type de lot d'objets"
+msgstr "Lots d'objets"
 
-msgid "Group label"
-msgstr "Libellé du groupe"
+msgid "Label"
+msgstr "Libellé"
 
-msgid "Inventory"
+msgid "Number of objects"
+msgstr "Nombre d'objets"
+
+msgid "Inventory number"
 msgstr "Inventaire"
 
 msgid "Dating"
@@ -365,22 +364,16 @@ msgid "Materials"
 msgstr "Matériaux"
 
 msgid "Place of discovery"
-msgstr "Leu de découverte"
+msgstr "Lieu de découverte"
 
 msgid "Collection"
 msgstr "Collection"
 
-msgid "Label"
-msgstr "Libellé"
+msgid "Group"
+msgstr "Groupe"
 
-msgid "Differentiation information"
-msgstr "Information de différentation"
-
-msgid "Total number"
-msgstr "Nombre total"
-
-msgid "Number of objects if more than one"
-msgstr "Nombre d'objets si plus d'un"
+msgid "Inventory"
+msgstr "Inventaire"
 
 msgid "Home"
 msgstr "Accueil"
@@ -402,6 +395,9 @@ msgstr "Voir sur le site"
 
 msgid "Add new run"
 msgstr "Ajouter un nouveau run"
+
+msgid "Differentiate objects"
+msgstr "Différencier les objets"
 
 msgid "Add another object group"
 msgstr "Ajouter un autre lot"

@@ -1,5 +1,6 @@
 @import url("./dsrf-overrides.css");
 @import url("./components/fieldset.css");
+@import url("./utils.css");
 
 :root {
   --blue-france: #000091;
