@@ -97,7 +97,10 @@ class ObjectGroup(models.Model):
     def __str__(self) -> str:
         label = self.label
         if self.object_count > 1:
-            label = "({}) {}".format(_("Group"), label)
+            count_str = _("%(object_count)s objects") % {
+                "object_count": self.object_count
+            }
+            label = "({}) {}".format(count_str, label)
         materials = ", ".join(self.materials)
 
         return f"{label} - {self.dating} - {materials}"

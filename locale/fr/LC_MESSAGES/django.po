@@ -365,8 +365,9 @@ msgstr "Lieu de découverte"
 msgid "Collection"
 msgstr "Collection"
 
-msgid "Group"
-msgstr "Groupe"
+#, python-format
+msgid "%(object_count)s objects"
+msgstr "%(object_count)s objets"
 
 msgid "Inventory"
 msgstr "Inventaire"
@@ -395,8 +396,8 @@ msgstr "Ajouter un nouveau run"
 msgid "Differentiate objects"
 msgstr "Différencier les objets"
 
-msgid "Add another object group"
-msgstr "Ajouter un autre lot"
+msgid "Add another object or object group"
+msgstr "Ajouter un autre objet ou groupe d'objets"
 
 msgid "Delete?"
 msgstr "Supprimer ?"

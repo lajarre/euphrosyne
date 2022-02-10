@@ -9,7 +9,7 @@
     <div class="fr-collapse" id="differentiation-accordion">
       <div class="js-inline-admin-formset inline-group overflow-auto" id="{{ inline_admin_formset.formset.prefix }}-group"
       data-inline-type="tabular"
-      data-inline-formset="{{ inline_admin_formset.inline_formset_data|update_inline_formset_data_add_text:_("Add another object group") }}">
+      data-inline-formset="{{ inline_admin_formset.inline_formset_data|update_inline_formset_data_add_text:_("Add another object or object group") }}">
       <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
         {{ inline_admin_formset.formset.management_form }}
           {{ inline_admin_formset.formset.non_form_errors }}
