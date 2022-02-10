@@ -7,7 +7,7 @@ from django.forms.fields import BooleanField
 from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.forms.utils import ErrorList
-from django.forms.widgets import HiddenInput, Select
+from django.forms.widgets import HiddenInput, NumberInput, Select
 from django.utils.translation import gettext_lazy as _
 
 from euphro_auth.models import User
@@ -325,22 +325,22 @@ class ObjectGroupForm(forms.ModelForm):
         help_texts = {"materials": _("Separate each material with a comma")}
         widgets = {
             "materials": widgets.TagsInput(),
+            "object_count": widgets.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs: Mapping[str, Any]) -> None:
         super().__init__(*args, **kwargs)
+        self.fields["add_type"].initial = ObjectGroupAddChoices.SINGLE_OBJECT.value[0]
+        self.fields["object_count"].initial = 1
         if self.instance.id:
             self.fields["add_type"].widget.attrs["disabled"] = "disabled"
-        if self.instance and self.instance.object_set.exists():
-            self.fields["add_type"].initial = ObjectGroupAddChoices.OBJECT_GROUP.value[
-                0
-            ]
-            self.fields["object_count"].initial = self.instance.object_set.count()
-        else:
-            self.fields["add_type"].initial = ObjectGroupAddChoices.SINGLE_OBJECT.value[
-                0
-            ]
-            self.fields["object_count"].initial = 1
+            if self.instance.object_count > 1:
+                self.fields[
+                    "add_type"
+                ].initial = ObjectGroupAddChoices.OBJECT_GROUP.value[0]
+                self.fields["object_count"].widget = NumberInput(
+                    {"class": "vIntegerField"}
+                )
 
 
 class BeamTimeRequestForm(ModelForm):

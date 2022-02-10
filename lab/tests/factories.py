@@ -115,6 +115,7 @@ class ObjectGroupFactory(factory.django.DjangoModelFactory):
     label = factory.Faker("words")
     dating = factory.fuzzy.FuzzyChoice(["XXe", "XIXe", "XVIIIe", "XVIIe"])
     materials = factory.fuzzy.FuzzyChoice(["wood", "stone", "glass", "metal"], list)
+    object_count = 3
 
     @factory.post_generation
     def objects(self, *args, **kwargs):

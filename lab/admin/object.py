@@ -15,7 +15,7 @@ class ObjectFormSet(BaseInlineFormSet):
     def save(self, commit: bool = True):
         saved_objects = super().save(commit)
         object_set_count = self.instance.object_set.count()
-        if self.instance.object_count != object_set_count:
+        if object_set_count and self.instance.object_count != object_set_count:
             self.instance.object_count = object_set_count
             self.instance.save()
         return saved_objects
@@ -55,11 +55,19 @@ class ObjectInline(admin.TabularInline):
     def get_formset(
         self, request: Any, obj: Optional[ObjectGroup] = None, **kwargs: Any
     ):
+        return super().get_formset(request, obj, formset=ObjectFormSet, **kwargs)
+
+    def get_min_num(
+        self,
+        request: HttpRequest,
+        obj: Optional[ObjectGroup] = None,
+        **kwargs: Mapping[str, Any]
+    ) -> Optional[int]:
         if request.method == "POST":
             # Forbids empty form in formset to enforce object_count is equal to
             # number of differentiared objects.
-            kwargs["min_num"] = int(request.POST["object_set-TOTAL_FORMS"])
-        return super().get_formset(request, obj, formset=ObjectFormSet, **kwargs)
+            return int(request.POST["object_set-TOTAL_FORMS"])
+        return super().get_min_num(request, obj, **kwargs)
 
     def get_max_num(
         self,
@@ -99,12 +107,7 @@ class ObjectGroupAdmin(ModelAdmin):
         extra_context: Optional[Dict[str, bool]] = None,
     ) -> Any:
         obj: ObjectGroup = self.get_object(request, object_id=object_id)
-        if obj:
-            are_objects_differentiated = obj.object_set.exists()
-        elif request.method == "POST" and "object_set-TOTAL_FORMS" in request.POST:
-            are_objects_differentiated = int(request.POST["object_set-TOTAL_FORMS"]) > 0
-        else:
-            are_objects_differentiated = False
+        are_objects_differentiated = self.get_are_objects_differentiated(request, obj)
 
         return super().changeform_view(
             request,
@@ -125,12 +128,17 @@ class ObjectGroupAdmin(ModelAdmin):
                 {
                     "fields": self.get_fields(request, obj),
                     "description": _(
-                        "An object group can contain multiple objects \
-                        or just one object. You can specify collection\
-                        and inventory at the group level or per object.\
-                        Use the total number field in the case of multiple \
-                        similar objects."
+                        "Fill up dating and inventory number if you object \
+                        group is undifferentiated."
                     ),
                 },
             )
         ]
+
+    @staticmethod
+    def get_are_objects_differentiated(request: HttpRequest, obj: ObjectGroup = None):
+        if obj:
+            return obj.object_set.exists()
+        if request.method == "POST" and "object_set-TOTAL_FORMS" in request.POST:
+            return int(request.POST["object_set-TOTAL_FORMS"]) > 0
+        return False
