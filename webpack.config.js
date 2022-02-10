@@ -62,6 +62,11 @@ export default {
           filename: "./fonts/[name][ext]",
         },
       },
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
+      },
     ],
   },
   optimization: {
