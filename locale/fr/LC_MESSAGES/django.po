@@ -168,11 +168,11 @@ msgstr "Documents"
 msgid "View project documents"
 msgstr "Afficher les documents du projet"
 
-msgid "Batch of objects"
-msgstr "Lot d'objets"
+msgid "Object / Sample"
+msgstr "Objet / Échantillon"
 
-msgid "Batches of objects"
-msgstr "Lots d'objets"
+msgid "Object(s) / Sample(s)"
+msgstr "Objet(s) / Échantillon(s)"
 
 msgid "Project"
 msgstr "Projet"
@@ -369,6 +369,9 @@ msgstr "Collection"
 msgid "%(object_count)s objects"
 msgstr "%(object_count)s objets"
 
+msgid "Object(s) / Sample(s"
+msgstr "Objet(s) / Échantillon(s)"
+
 msgid "Inventory"
 msgstr "Inventaire"
 
@@ -502,8 +505,8 @@ msgstr "Vous pouvez accéder à l'invitation ici :"
 msgid "Join project"
 msgstr "Rejoindre le projet"
 
-msgid "Select an object group"
-msgstr "Choisissez un lot d'objets"
+msgid "Select an object or a group of objects"
+msgstr "Choisissez un object ou groupe d'objets"
 
 msgid "Verify your information"
 msgstr "Vérifiez vos informations"

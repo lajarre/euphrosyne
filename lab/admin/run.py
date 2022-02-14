@@ -22,8 +22,8 @@ class ObjectGroupInline(admin.TabularInline):
     template = "admin/edit_inline/tabular_objectgroup_in_run.html"
     parent_instance: Run
     model = Run.run_object_groups.through
-    verbose_name = _("Batch of objects")
-    verbose_name_plural = _("Batches of objects")
+    verbose_name = _("Object / Sample")
+    verbose_name_plural = _("Object(s) / Sample(s)")
     extra = 0
 
     def has_view_permission(

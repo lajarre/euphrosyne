@@ -106,8 +106,8 @@ class ObjectGroup(models.Model):
         return f"{label} - {self.dating} - {materials}"
 
     class Meta:
-        verbose_name = _("Batch of objects")
-        verbose_name_plural = _("Batches of objects")
+        verbose_name = _("Object / Sample")
+        verbose_name_plural = _("Object(s) / Sample(s")
 
 
 class Object(models.Model):
