@@ -85,7 +85,10 @@ class RunAdmin(LabPermissionMixin, ModelAdmin):
         ),
         (
             _("Experimental conditions"),
-            {"fields": ("particle_type", "energy_in_keV", "beamline")},
+            {
+                "fields": ("particle_type", "energy_in_keV", "beamline"),
+                "classes": ("mb-0",),
+            },
         ),
         (
             "METHODS",
