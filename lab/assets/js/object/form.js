@@ -56,6 +56,17 @@ export function updateObjectRows(newObjectCount) {
   }
 }
 
+export function toggleInlineInputsDisabledOnParentChange(
+  fieldName,
+  inputValue
+) {
+  const parentHasValue = inputValue !== "",
+    inlineInputs = getObjectsInlineEl().querySelectorAll(
+      `.field-${fieldName} input`
+    );
+  inlineInputs.forEach((el) => (el.disabled = parentHasValue));
+}
+
 function deleteRows(rowArray) {
   rowArray.forEach((el) => {
     el.querySelector("a.inline-deletelink").dispatchEvent(new Event("click"));

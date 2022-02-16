@@ -9,10 +9,59 @@ from ...models.run import ObjectGroup
 
 
 class TestObjectFormset(TestCase):
-    @staticmethod
-    def test_updates_object_count_on_save():
+    def setUp(self):
+        self.inline = ObjectInline(ObjectGroup, admin_site=AdminSite())
+
+    def test_disables_collection_when_parent_instance_has_collection(self):
+        objectgroup: ObjectGroup = ObjectGroupFactory(collection="abc")
+        request = RequestFactory().get(
+            reverse("admin:lab_objectgroup_change", args=[objectgroup.id])
+        )
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
+            data={}, instance=objectgroup
+        )
+        assert all(
+            form.fields["collection"].widget.attrs["disabled"] for form in formset
+        )
+
+    def test_does_not_disable_collection_when_parent_instance_has_no_collection(self):
+        objectgroup: ObjectGroup = ObjectGroupFactory(collection="")
+        request = RequestFactory().get(
+            reverse("admin:lab_objectgroup_change", args=[objectgroup.id])
+        )
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
+            data={}, instance=objectgroup
+        )
+        assert all(
+            not form.fields["collection"].widget.attrs["disabled"] for form in formset
+        )
+
+    def test_disables_inventory_when_parent_instance_has_inventory(self):
+        objectgroup: ObjectGroup = ObjectGroupFactory(inventory="abc")
+        request = RequestFactory().get(
+            reverse("admin:lab_objectgroup_change", args=[objectgroup.id])
+        )
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
+            data={}, instance=objectgroup
+        )
+        assert all(
+            form.fields["inventory"].widget.attrs["disabled"] for form in formset
+        )
+
+    def test_does_not_disable_collection_when_parent_instance_has_no_inventory(self):
+        objectgroup: ObjectGroup = ObjectGroupFactory(inventory="")
+        request = RequestFactory().get(
+            reverse("admin:lab_objectgroup_change", args=[objectgroup.id])
+        )
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
+            data={}, instance=objectgroup
+        )
+        assert all(
+            not form.fields["inventory"].widget.attrs["disabled"] for form in formset
+        )
+
+    def test_updates_object_count_on_save(self):
         objectgroup: ObjectGroup = ObjectGroupFactory(object_count=0)
-        inline = ObjectInline(ObjectGroup, admin_site=AdminSite())
         data = {
             "object_set-TOTAL_FORMS": "2",
             "object_set-INITIAL_FORMS": "0",
@@ -31,7 +80,7 @@ class TestObjectFormset(TestCase):
             reverse("admin:lab_objectgroup_change", args=[objectgroup.id]), data=data
         )
 
-        formset: ObjectFormSet = inline.get_formset(request, objectgroup)(
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
             data=data, instance=objectgroup
         )
         formset.is_valid()
@@ -40,11 +89,9 @@ class TestObjectFormset(TestCase):
         objectgroup.refresh_from_db()
         assert objectgroup.object_count == objectgroup.object_set.count()
 
-    @staticmethod
-    def test_does_not_update_object_count_when_no_objects():
+    def test_does_not_update_object_count_when_no_objects(self):
         objectgroup: ObjectGroup = ObjectGroupFactory(object_count=3)
         objectgroup.object_set.all().delete()
-        inline = ObjectInline(ObjectGroup, admin_site=AdminSite())
         data = {
             "object_set-TOTAL_FORMS": "0",
             "object_set-INITIAL_FORMS": "0",
@@ -55,7 +102,7 @@ class TestObjectFormset(TestCase):
             reverse("admin:lab_objectgroup_change", args=[objectgroup.id]), data=data
         )
 
-        formset: ObjectFormSet = inline.get_formset(request, objectgroup)(
+        formset: ObjectFormSet = self.inline.get_formset(request, objectgroup)(
             data=data, instance=objectgroup
         )
         formset.is_valid()

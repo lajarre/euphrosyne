@@ -3,6 +3,7 @@ import {
   updateObjectRows,
   displaySingleObjectForm,
   displayObjectGroupForm,
+  toggleInlineInputsDisabledOnParentChange,
 } from "../object/form.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -52,6 +53,20 @@ document.addEventListener("DOMContentLoaded", function () {
         event.target.getAttribute("aria-expanded") === "true"
       );
       handleAccordionClick(isExpanded, getObjectCountInput().value);
+    });
+
+  document
+    .getElementById("id_inventory")
+    .addEventListener("change", (event) => {
+      toggleInlineInputsDisabledOnParentChange("inventory", event.target.value);
+    });
+  document
+    .getElementById("id_collection")
+    .addEventListener("change", (event) => {
+      toggleInlineInputsDisabledOnParentChange(
+        "collection",
+        event.target.value
+      );
     });
 
   django.jQuery(document).on("formset:added", onFormsetChange);

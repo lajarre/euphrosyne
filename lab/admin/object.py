@@ -12,6 +12,27 @@ from ..permissions import is_lab_admin
 
 
 class ObjectFormSet(BaseInlineFormSet):
+    # pylint: disable=too-many-arguments
+    def __init__(
+        self,
+        data: Optional[Any] = None,
+        files: Optional[Any] = None,
+        instance: Optional[Any] = None,
+        save_as_new: bool = False,
+        prefix: Optional[Any] = None,
+        queryset: Optional[Any] = None,
+        **kwargs: Any
+    ) -> None:
+        super().__init__(data, files, instance, save_as_new, prefix, queryset, **kwargs)
+        if instance and (instance.collection or instance.inventory):
+            for form in self:
+                form.fields["collection"].widget.attrs["disabled"] = bool(
+                    instance.collection
+                )
+                form.fields["inventory"].widget.attrs["disabled"] = bool(
+                    instance.inventory
+                )
+
     def save(self, commit: bool = True):
         saved_objects = super().save(commit)
         object_set_count = self.instance.object_set.count()
