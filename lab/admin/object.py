@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.forms import BaseInlineFormSet
+from django.http import HttpResponse, HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -137,6 +138,9 @@ class ObjectGroupAdmin(ModelAdmin):
             extra_context={
                 **(extra_context if extra_context else {}),
                 "are_objects_differentiated": are_objects_differentiated,
+                "show_save_as_new": False,
+                "show_save_and_add_another": False,
+                "show_save_and_continue": False,
             },
         )
 
@@ -155,6 +159,12 @@ class ObjectGroupAdmin(ModelAdmin):
                 },
             )
         ]
+
+    def response_change(self, request: HttpRequest, obj: ObjectGroup) -> HttpResponse:
+        response = super().response_change(request, obj)
+        if "next" in request.GET:
+            return HttpResponseRedirect(request.GET["next"])
+        return response
 
     @staticmethod
     def get_are_objects_differentiated(request: HttpRequest, obj: ObjectGroup = None):
