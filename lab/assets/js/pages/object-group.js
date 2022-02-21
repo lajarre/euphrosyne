@@ -7,22 +7,18 @@ import {
 } from "../object/form.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const getObjectsInlineEl = () => document.getElementById("object_set-group"),
-    getObjectRows = () =>
-      getObjectsInlineEl().querySelectorAll("tbody tr.dynamic-object_set"),
-    getObjectCountInput = () => document.getElementById("id_object_count"),
-    getAddTypeInput = () => document.getElementById("id_add_type"),
-    getAccordionButton = () =>
-      document.querySelector(
-        'button[aria-controls="differentiation-accordion"]'
-      );
+  const getObjectCountInput = () => document.getElementById("id_object_count");
 
   function onFormsetChange() {
     const isExpanded = !(
-      getAccordionButton().getAttribute("aria-expanded") === "true"
+      document
+        .querySelector('button[aria-controls="differentiation-accordion"]')
+        .getAttribute("aria-expanded") === "true"
     );
     if (isExpanded) {
-      getObjectCountInput().value = getObjectRows().length;
+      getObjectCountInput().value = document.querySelectorAll(
+        "#object_set-group tbody tr.dynamic-object_set"
+      ).length;
     }
   }
 
@@ -40,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("id_object_count")
     .addEventListener("input", function (event) {
-      if (getAddTypeInput().value === "SINGLE_OBJECT") {
+      if (document.getElementById("id_add_type").value === "SINGLE_OBJECT") {
         return;
       }
       updateObjectRows(event.target.value);
