@@ -14,7 +14,7 @@ from ..forms import RunDetailsForm
 from ..models import Project, Run
 from ..permissions import LabRole, is_lab_admin
 from ..serializers import convert_for_ui
-from ..widgets import PlaceholderSelect, SplitDateTimeWithDefaultTime
+from ..widgets import RelatedObjectRunWidgetWrapper, SplitDateTimeWithDefaultTime
 from .mixins import LabPermission, LabPermissionMixin
 
 
@@ -51,9 +51,7 @@ class ObjectGroupInline(admin.TabularInline):
             # pylint: disable=no-member
             return ObjectGroupChoiceField(
                 project_id=self.parent_instance.project_id,
-                widget=widgets.RelatedFieldWidgetWrapper(
-                    PlaceholderSelect(),
-                    Run.run_object_groups.rel,
+                widget=RelatedObjectRunWidgetWrapper(
                     admin_site=self.admin_site,
                     can_add_related=True,
                 ),

@@ -3,6 +3,7 @@ from typing import Any, Optional, Tuple
 
 from django import forms
 from django.contrib.admin import site
+from django.contrib.admin.sites import AdminSite
 from django.contrib.admin.widgets import AdminSplitDateTime, RelatedFieldWidgetWrapper
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.widgets import (
@@ -16,6 +17,7 @@ from django.forms.widgets import (
 from django.urls import reverse
 
 from euphro_auth.models import User
+from lab.models.run import Run
 
 
 class UserWidgetWrapper(RelatedFieldWidgetWrapper):
@@ -174,3 +176,26 @@ class ChoiceTag(ChoiceWidget):
 
     class Media:
         js = ("js/widgets/choice-tag.js",)
+
+
+class RelatedObjectRunWidgetWrapper(RelatedFieldWidgetWrapper):
+    template_name = "widgets/related_object_run_widget_wrapper.html"
+
+    def __init__(
+        self,
+        admin_site: AdminSite,
+        can_add_related=None,
+        can_change_related=False,
+        can_delete_related=False,
+        can_view_related=False,
+    ) -> None:
+        self.run = run
+        super().__init__(
+            PlaceholderSelect(),
+            Run.run_object_groups.rel,
+            admin_site,
+            can_add_related,
+            can_change_related,
+            can_delete_related,
+            can_view_related,
+        )
