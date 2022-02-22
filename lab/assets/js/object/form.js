@@ -23,6 +23,12 @@ export function displaySingleObjectForm() {
   objectCountInput.setAttribute("min", 1);
   objectCountInput.value = 1;
   getObjectCountField().classList.add("hidden");
+  document
+    .querySelector("button[data-value='OBJECT_GROUP']")
+    .setAttribute("aria-pressed", false);
+  document
+    .querySelector("button[data-value='SINGLE_OBJECT']")
+    .setAttribute("aria-pressed", true);
 
   updateObjectRows(0);
   getObjectsInlineFieldset().classList.add("hidden");
@@ -37,6 +43,12 @@ export function displayObjectGroupForm() {
   objectCountInput.setAttribute("min", 2);
   objectCountInput.setAttribute("type", "number");
   getObjectCountField().classList.remove("hidden");
+  document
+    .querySelector("button[data-value='OBJECT_GROUP']")
+    .setAttribute("aria-pressed", true);
+  document
+    .querySelector("button[data-value='SINGLE_OBJECT']")
+    .setAttribute("aria-pressed", false);
 
   getObjectsInlineFieldset().classList.remove("hidden");
   getAccordionButton().setAttribute("aria-expanded", false);

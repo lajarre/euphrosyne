@@ -12,3 +12,7 @@ h3.fr-accordion__title {
   padding-right: 0;
   margin-top: 0;
 }
+
+input:disabled {
+  background-color: var(--grey-950-100);
+}

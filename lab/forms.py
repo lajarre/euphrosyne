@@ -308,6 +308,7 @@ class ObjectGroupForm(forms.ModelForm):
         choices=ObjectGroupAddChoices.to_choices(),
         widget=widgets.ChoiceTag(),
         required=False,
+        initial=ObjectGroupAddChoices.SINGLE_OBJECT.value[0],
     )
 
     class Meta:
@@ -325,22 +326,18 @@ class ObjectGroupForm(forms.ModelForm):
         help_texts = {"materials": _("Separate each material with a comma")}
         widgets = {
             "materials": widgets.TagsInput(),
-            "object_count": widgets.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs: Mapping[str, Any]) -> None:
         super().__init__(*args, **kwargs)
-        self.fields["add_type"].initial = ObjectGroupAddChoices.SINGLE_OBJECT.value[0]
         self.fields["object_count"].initial = 1
+        self.fields["add_type"].initial = (
+            ObjectGroupAddChoices.OBJECT_GROUP.value[0]
+            if self.instance.id and self.instance.object_count > 1
+            else ObjectGroupAddChoices.SINGLE_OBJECT.value[0]
+        )
         if self.instance.id:
             self.fields["add_type"].widget.attrs["disabled"] = "disabled"
-            if self.instance.object_count > 1:
-                self.fields[
-                    "add_type"
-                ].initial = ObjectGroupAddChoices.OBJECT_GROUP.value[0]
-                self.fields["object_count"].widget = NumberInput(
-                    {"class": "vIntegerField"}
-                )
 
 
 class BeamTimeRequestForm(ModelForm):

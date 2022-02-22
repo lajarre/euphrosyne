@@ -67,4 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   django.jQuery(document).on("formset:added", onFormsetChange);
   django.jQuery(document).on("formset:removed", onFormsetChange);
+
+  if (document.getElementById("id_object_count").value === "1") {
+    displaySingleObjectForm();
+  } else {
+    displayObjectGroupForm();
+  }
 });
