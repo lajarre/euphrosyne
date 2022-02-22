@@ -3,7 +3,7 @@ from datetime import time
 from typing import Any, List, Optional, Tuple, Type, Union
 
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin, widgets
+from django.contrib.admin import ModelAdmin
 from django.contrib.admin.options import IS_POPUP_VAR, InlineModelAdmin
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
@@ -25,6 +25,9 @@ class ObjectGroupInline(admin.TabularInline):
     verbose_name = _("Object / Sample")
     verbose_name_plural = _("Object(s) / Sample(s)")
     extra = 0
+
+    class Media:
+        js = ("pages/objectgroup-inline.js",)
 
     def has_view_permission(
         self, request: HttpRequest, obj: Optional[Run] = None
@@ -52,6 +55,7 @@ class ObjectGroupInline(admin.TabularInline):
             return ObjectGroupChoiceField(
                 project_id=self.parent_instance.project_id,
                 widget=RelatedObjectRunWidgetWrapper(
+                    self.parent_instance,
                     admin_site=self.admin_site,
                     can_add_related=True,
                 ),

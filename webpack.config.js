@@ -67,6 +67,10 @@ export default {
         enforce: "pre",
         use: ["source-map-loader"],
       },
+      {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
     ],
   },
   optimization: {

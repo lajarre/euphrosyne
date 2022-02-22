@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-21 19:00+0100\n"
+"POT-Creation-Date: 2022-02-22 16:49+0100\n"
 "PO-Revision-Date: 2021-09-09 19:04+0200\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -405,6 +405,9 @@ msgstr "Ajouter un autre objet ou groupe d'objets"
 msgid "Delete?"
 msgstr "Supprimer ?"
 
+msgid "Popup closing…"
+msgstr "Fenêtre pop-up en cours de fermeture…"
+
 #, python-format
 msgid "Add %(name)s"
 msgstr "Ajouter %(name)s"
@@ -446,9 +449,6 @@ msgstr "Non, fermer la fenêtre"
 
 msgid "Methods"
 msgstr "Méthodes"
-
-msgid "Popup closing…"
-msgstr "Fenêtre pop-up en cours de fermeture…"
 
 msgid "Delete"
 msgstr "Supprimer"

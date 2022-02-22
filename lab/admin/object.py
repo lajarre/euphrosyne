@@ -1,11 +1,15 @@
+import json
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
+from django.contrib.admin.views.main import IS_POPUP_VAR
 from django.forms import BaseInlineFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
+
+from lab.models.run import Run
 
 from ..forms import ObjectGroupForm
 from ..models import Object, ObjectGroup
@@ -108,8 +112,8 @@ class ObjectGroupAdmin(ModelAdmin):
     form = ObjectGroupForm
 
     class Media:
-        js = ("pages/object-group.js",)
-        css = {"all": ("css/admin/object-group.css",)}
+        js = ("pages/objectgroup.js",)
+        css = {"all": ("css/admin/objectgroup.css",)}
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return request.user.is_staff
@@ -120,6 +124,33 @@ class ObjectGroupAdmin(ModelAdmin):
         return is_lab_admin(request.user) or (
             obj and obj.runs.filter(project__members=request.user.id).exists()
         )
+
+    def get_fieldsets(
+        self, request: HttpRequest, obj: Optional[ObjectGroup] = None
+    ) -> List[Tuple[Optional[str], Dict[str, Any]]]:
+        return [
+            (
+                None,
+                {
+                    "fields": self.get_fields(request, obj),
+                    "description": _(
+                        "Fill up dating and inventory number if you object \
+                        group is undifferentiated."
+                    ),
+                },
+            )
+        ]
+
+    def save_model(
+        self, request: Any, obj: ObjectGroup, form: ObjectGroupForm, change: bool
+    ) -> None:
+        super().save_model(request, obj, form, change)
+        if not change and request.POST.get(IS_POPUP_VAR) and "run" in request.GET:
+            try:
+                run = Run.objects.get(pk=request.GET["run"])
+            except Run.DoesNotExist:
+                return
+            obj.runs.add(run)
 
     def changeform_view(
         self,
@@ -144,21 +175,25 @@ class ObjectGroupAdmin(ModelAdmin):
             },
         )
 
-    def get_fieldsets(
-        self, request: HttpRequest, obj: Optional[ObjectGroup] = None
-    ) -> List[Tuple[Optional[str], Dict[str, Any]]]:
-        return [
-            (
-                None,
+    def response_add(
+        self,
+        request: HttpRequest,
+        obj: ObjectGroup,
+        post_url_continue: Optional[str] = None,
+    ) -> HttpResponse:
+        response = super().response_add(request, obj, post_url_continue)
+        if request.method == "POST" and request.POST.get(IS_POPUP_VAR, 0):
+            response.context_data["popup_response_data"] = json.dumps(
                 {
-                    "fields": self.get_fields(request, obj),
-                    "description": _(
-                        "Fill up dating and inventory number if you object \
-                        group is undifferentiated."
+                    **json.loads(response.context_data["popup_response_data"]),
+                    "objectgroup_run_run_ids": list(
+                        obj.runs.through.objects.filter(objectgroup=obj.id).values_list(
+                            "id", "run_id"
+                        )
                     ),
-                },
+                }
             )
-        ]
+        return response
 
     def response_change(self, request: HttpRequest, obj: ObjectGroup) -> HttpResponse:
         response = super().response_change(request, obj)

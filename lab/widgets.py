@@ -181,8 +181,10 @@ class ChoiceTag(ChoiceWidget):
 class RelatedObjectRunWidgetWrapper(RelatedFieldWidgetWrapper):
     template_name = "widgets/related_object_run_widget_wrapper.html"
 
+    # pylint: disable=too-many-arguments
     def __init__(
         self,
+        run: Run,
         admin_site: AdminSite,
         can_add_related=None,
         can_change_related=False,
@@ -192,6 +194,7 @@ class RelatedObjectRunWidgetWrapper(RelatedFieldWidgetWrapper):
         self.run = run
         super().__init__(
             PlaceholderSelect(),
+            # pylint: disable=no-member
             Run.run_object_groups.rel,
             admin_site,
             can_add_related,
@@ -199,3 +202,12 @@ class RelatedObjectRunWidgetWrapper(RelatedFieldWidgetWrapper):
             can_delete_related,
             can_view_related,
         )
+
+    def get_context(
+        self, name: str, value: Any, attrs: Optional[dict[str, Any]]
+    ) -> dict[str, Any]:
+        context = super().get_context(name, value, attrs)
+        context["url_params"] += f"&run={self.run.id}"
+        return {
+            **context,
+        }
