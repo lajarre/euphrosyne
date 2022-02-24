@@ -29,4 +29,7 @@ class ProjectDocumentsView(StaffUserRequiredMixin, TemplateView):
             "subtitle": "{} | {}".format(self.project.name, _("Upload documents")),
             "project": self.project,
             "file_table": {"attrs": {"id": "document_list"}},
+            "file_upload_form": {
+                "attrs": {"id": "upload-form", "project-id": self.project.id}
+            },
         }

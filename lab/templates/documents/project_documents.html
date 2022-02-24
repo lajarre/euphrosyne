@@ -25,18 +25,7 @@ Project {{ project_name }} documents
 {% endblocktranslate %}</h1>
 <div id="content-main">
     <ul class="messagelist"></ul>
-    <form id="upload-form" class="fr-mb-4w">
-        <div class="fr-upload-group">
-            <label class="fr-label" for="file-upload">{% translate 'Add files' %}
-                <span class="fr-hint-text">
-                    {% translate 'Max size allowed : 30 Mo. Multiple files allowed.' %}
-                    {% translate 'Allowed files: images, documents and archives.' %}
-                </span>
-            </label>
-            <input class="fr-upload" type="file" id="file-upload" name="files" multiple required>
-        </div>
-        <input value="{% translate 'Upload' %}" class="button fr-mt-2w" type="submit" id="upload-button">
-    </form>
+    {% include "components/file_upload_form.html" with attrs=file_upload_form.attrs %}
     <div class="documents-wrapper">
         <h2>{% translate 'Documents' %}</h2>
         <div>

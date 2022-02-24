@@ -22,18 +22,30 @@
 {% block content %}
 <div id="content-main">
     <ul class="messagelist"></ul>
-    <form id="upload-form" class="fr-mb-4w">
-        <div class="fr-upload-group">
-            <label class="fr-label" for="file-upload">{% translate 'Add files' %}
-                <span class="fr-hint-text">
-                    {% translate 'Max size allowed : 30 Mo. Multiple files allowed.' %}
-                    {% translate 'Allowed files: images, documents and archives.' %}
-                </span>
-            </label>
-            <input class="fr-upload" type="file" id="file-upload" name="files" multiple required>
+
+    <div class="fr-container">
+        <div class="fr-grid-row fr-grid-row--gutters">
+            <div class="fr-col-12 fr-col-lg-6">
+                <form id="upload-form" class="fr-mb-4w">
+                    <div class="fr-upload-group">
+                        <label class="fr-label" for="file-upload">{% translate 'Add files' %}
+                            <span class="fr-hint-text">
+                                {% translate 'Max size allowed : 30 Mo. Multiple files allowed.' %}
+                                {% translate 'Allowed files: images, documents and archives.' %}
+                            </span>
+                        </label>
+                        <input class="fr-upload" type="file" id="file-upload" name="files" multiple required>
+                    </div>
+                    <input value="{% translate 'Upload' %}" class="button fr-mt-2w" type="submit" id="upload-button">
+                </form>
+            </div>
+            <div class="fr-col-12 fr-col-lg-6">
+                
+            </div>
         </div>
-        <input value="{% translate 'Upload' %}" class="button fr-mt-2w" type="submit" id="upload-button">
-    </form>
+    </div>
+
+    
     <div class="documents-wrapper">
         <h2>{% translate 'Documents' %}</h2>
         <div>

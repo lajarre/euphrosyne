@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<table is="file-table" {% if attrs %}{% for name, value in attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}{% endif %}>
+<table is="file-table" {% if attrs %}{% include "attrs.html" %}{% endif %}>
     <thead>
         <tr>  
             <th scope="col" class="column-name">

@@ -1,0 +1,13 @@
+{% load i18n %}
+<form is="file-upload-form" {% if attrs %}{% include "attrs.html" %}{% endif %}>
+    <div class="fr-upload-group fr-mb-4w">
+        <label class="fr-label" for="file-upload">{% translate 'Add files' %}
+            <span class="fr-hint-text">
+                {% translate 'Max size allowed : 30 Mo. Multiple files allowed.' %}
+                {% translate 'Allowed files: images, documents and archives.' %}
+            </span>
+        </label>
+        <input class="fr-upload" type="file" id="file-upload" name="files" multiple required>
+    </div>
+    <input value="{% translate 'Upload' %}" class="button fr-mt-2w" type="submit" id="upload-button">
+</form>

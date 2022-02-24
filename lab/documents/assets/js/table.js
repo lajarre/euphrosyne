@@ -1,8 +1,8 @@
 "use strict";
 
 import { displayMessage } from "../../../assets/js/utils.js";
-import { fetchDownloadPresignedURL } from "./presigned-url-service.js";
-import { listObjectsV2, deleteObject } from "./s3-service.js";
+import { fetchDownloadPresignedURL } from "../../../assets/js/presigned-url-service.js";
+import { listObjectsV2, deleteObject } from "../../../assets/js/s3-service.js";
 
 function getDocumentTable() {
   return document.getElementById("document_list");

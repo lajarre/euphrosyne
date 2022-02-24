@@ -1,10 +1,6 @@
 import { formatBytes } from "../utils.js";
 
 export class FileTable extends HTMLTableElement {
-  constructor() {
-    super();
-  }
-
   static init() {
     customElements.define("file-table", FileTable, { extends: "table" });
   }
