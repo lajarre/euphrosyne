@@ -1,10 +1,13 @@
 import enum
 from typing import Optional
 
+from django.http import HttpResponse
 from django.http.request import HttpRequest
+from django.shortcuts import get_object_or_404
 
 from euphro_auth.models import User
 from lab.models import Project
+from shared.view_mixins import StaffUserRequiredMixin
 
 
 class LabRole(enum.IntEnum):
@@ -38,3 +41,17 @@ def is_lab_admin(user: User) -> bool:
 
 def is_project_leader(user: User, project: Project) -> bool:
     return project.participation_set.filter(user=user, is_leader=True).exists()
+
+
+class ProjectMembershipRequiredMixin(StaffUserRequiredMixin):
+    # pylint: disable=arguments-differ
+    def dispatch(
+        self, request: HttpRequest, project_id: int, *args, **kwargs
+    ) -> HttpResponse:
+        response = super().dispatch(request, *args, **kwargs)
+        if (
+            not is_lab_admin(request.user)
+            and not Project.objects.filter(members__id=request.user.id).exists()
+        ):
+            return self.handle_no_permission()
+        return response

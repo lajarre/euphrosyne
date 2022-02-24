@@ -1,0 +1,32 @@
+{% load i18n %}
+
+<table is="file-table" {% if attrs %}{% for name, value in attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}{% endif %}>
+    <thead>
+        <tr>  
+            <th scope="col" class="column-name">
+                <div class="text">{% trans "File name" %}</div>
+                <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-name">
+                    <div class="text">{% trans "Last modified" %}</div>
+                    <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-name">
+                    <div class="text">{% trans "Size" %}</div>
+                    <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-name"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="no_data" style="display:none">
+            <td colspan="4">{% translate 'No document yet' %}</td>
+        </tr>
+        <tr class="loading">
+            <td><div>&nbsp;</div></td>
+            <td><div>&nbsp;</div></td>
+            <td><div>&nbsp;</div></td>
+            <td><div>&nbsp;</div></td>
+        </tr>
+    </tbody>
+</table>
