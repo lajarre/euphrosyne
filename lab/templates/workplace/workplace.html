@@ -26,33 +26,16 @@
     <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-12 fr-col-lg-6">
-                <form id="upload-form" class="fr-mb-4w">
-                    <div class="fr-upload-group">
-                        <label class="fr-label" for="file-upload">{% translate 'Add files' %}
-                            <span class="fr-hint-text">
-                                {% translate 'Max size allowed : 30 Mo. Multiple files allowed.' %}
-                                {% translate 'Allowed files: images, documents and archives.' %}
-                            </span>
-                        </label>
-                        <input class="fr-upload" type="file" id="file-upload" name="files" multiple required>
-                    </div>
-                    <input value="{% translate 'Upload' %}" class="button fr-mt-2w" type="submit" id="upload-button">
-                </form>
+                {% include "components/file_upload_form.html" with attrs=raw_data_upload_form.attrs %}
+                {% include "components/file_table.html" with attrs=raw_data_table.attrs %}
             </div>
             <div class="fr-col-12 fr-col-lg-6">
-                
+                {% include "components/file_upload_form.html" with attrs=processed_data_upload_form.attrs %}
+                {% include "components/file_table.html" with attrs=processed_data_table.attrs %}                
             </div>
-        </div>
-    </div>
-
-    
-    <div class="documents-wrapper">
-        <h2>{% translate 'Documents' %}</h2>
-        <div>
-            {% include "components/file_table.html" with attrs=file_table.attrs %}
         </div>
     </div>
 </div>
 <script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'pages/document.js' %}"></script>
+<script src="{% static 'pages/workplace.js' %}"></script>
 {% endblock %}

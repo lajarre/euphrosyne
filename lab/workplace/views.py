@@ -26,4 +26,15 @@ class WorkplaceView(ProjectMembershipRequiredMixin, TemplateView):
             **super().get_context_data(**kwargs),
             **site.each_context(self.request),
             "project": self.project,
+            "raw_data_table": {"attrs": {"id": "raw-data-table"}},
+            "processed_data_table": {"attrs": {"id": "processed-data-table"}},
+            "raw_data_upload_form": {
+                "attrs": {"id": "raw-data-upload-form", "project-id": self.project.id}
+            },
+            "processed_data_upload_form": {
+                "attrs": {
+                    "id": "processed-data-upload-form",
+                    "project-id": self.project.id,
+                }
+            },
         }
