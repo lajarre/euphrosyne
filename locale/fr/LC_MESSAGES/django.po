@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 02:12+0100\n"
+"POT-Creation-Date: 2022-02-28 18:35+0100\n"
 "PO-Revision-Date: 2021-09-09 19:04+0200\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -189,6 +189,13 @@ msgstr "Projet"
 
 msgid "Upload documents"
 msgstr "Téléverser des documents"
+
+msgid ""
+"Max size allowed : 30 Mo. Multiple files allowed. Allowed files: images, "
+"documents and archives."
+msgstr ""
+"Taille maximale autorisée : 30 Mo. Multiple files allowed. Fichiers "
+"supportés : images, documents et archives."
 
 #, python-brace-format
 msgid "[Euphrosyne] Invitation to join project {project.name}"
@@ -487,26 +494,6 @@ msgstr "Sauvegarder et continuer l'édition"
 msgid "Save and view"
 msgstr "Sauvegarder et voir"
 
-#, python-format
-msgid ""
-"\n"
-"Project %(project_name)s documents\n"
-msgstr ""
-"\n"
-"Documents du projet %(project_name)s\n"
-
-msgid "Add files"
-msgstr "Ajouter des fichiers"
-
-msgid "Max size allowed : 30 Mo. Multiple files allowed."
-msgstr "Max size allowed : 30 Mo. Multiple files allowed."
-
-msgid "Allowed files: images, documents and archives."
-msgstr "Fichiers supportés : images, documents et archives."
-
-msgid "Upload"
-msgstr "Téléverser"
-
 msgid "File name"
 msgstr "Fichier"
 
@@ -516,8 +503,19 @@ msgstr "Modifié le"
 msgid "Size"
 msgstr "Taille"
 
-msgid "No document yet"
-msgstr "Aucun document ajouté"
+msgid "Add files"
+msgstr "Ajouter des fichiers"
+
+msgid "Upload"
+msgstr "Téléverser"
+
+#, python-format
+msgid ""
+"\n"
+"Project %(project_name)s documents\n"
+msgstr ""
+"\n"
+"Documents du projet %(project_name)s\n"
 
 msgid "Other"
 msgstr "Autre"
@@ -535,6 +533,15 @@ msgstr "Rejoindre le projet"
 
 msgid "Select an object group"
 msgstr "Choisissez un lot d'objets"
+
+msgid "Workplace"
+msgstr "Workplace"
+
+msgid "Raw data"
+msgstr "Données brutes"
+
+msgid "Processed data"
+msgstr "Données travaillées"
 
 msgid "Verify your information"
 msgstr "Vérifiez vos informations"

@@ -1,71 +1,99 @@
 import { formatBytes } from "../utils.js";
 
 export class FileTable extends HTMLTableElement {
+  constructor() {
+    super();
+    this.classList.add("file-table");
+    this.dataRows = [];
+  }
+
+  get loadingRow() {
+    return this.querySelector("tr.loading");
+  }
+
   static init() {
     customElements.define("file-table", FileTable, { extends: "table" });
   }
 
   toggleLoading(active) {
     if (active) {
-      this.querySelectorAll("tbody tr:not(.loading)").forEach(
-        (el) => (el.style.display = "none")
-      );
-      this.querySelector("tbody tr.loading").style.display = "";
+      this.tBodies[0].querySelectorAll("tr").forEach((row) => row.remove());
+      this.tBodies[0].appendChild(this.generateLoadingRow());
     } else {
-      const tableRows = this.querySelectorAll("tbody tr:not(.loading)");
-      tableRows.forEach((el) => (el.style.display = ""));
-      if (tableRows.length > 1) {
-        document.querySelector("tr.no_data").style.display = "none";
+      this.loadingRow.remove();
+      if (this.dataRows.length > 0) {
+        this.dataRows.forEach((row) => {
+          this.tBodies[0].appendChild(row);
+        });
+      } else {
+        this.tBodies[0].appendChild(this.generateNoDataRow());
       }
-      this.querySelector("tbody tr.loading").style.display = "none";
     }
   }
 
   updateFiles(projectId, documentXMLEls) {
-    const tableBodyEl = this.tBodies[0];
-    this.toggleLoading(false);
-    tableBodyEl.querySelectorAll(".document-row").forEach((el) => el.remove());
-    if (documentXMLEls.length) {
-      document.querySelector("tr.no_data").style.display = "none";
-      documentXMLEls.forEach((documentEl) => {
-        const rowEl = this.insertRow(-1);
-        rowEl.classList.add("document-row");
+    this.dataRows = [];
+    documentXMLEls.forEach((documentEl) => {
+      const rowEl = this.insertRow(-1);
+      rowEl.classList.add("document-row");
 
-        const keyCell = rowEl.insertCell(),
-          keyCellText = document.createTextNode(
-            decodeURIComponent(
-              documentEl.querySelector("Key").textContent.split("/").pop()
-            )
-          );
-        keyCell.appendChild(keyCellText);
-
-        const lastModifiedCell = rowEl.insertCell(),
-          lastModifiedCellText = document.createTextNode(
-            new Date(
-              documentEl.querySelector("LastModified").textContent
-            ).toLocaleDateString()
-          );
-        lastModifiedCell.appendChild(lastModifiedCellText);
-
-        const sizeCell = rowEl.insertCell(),
-          sizeCellText = document.createTextNode(
-            formatBytes(
-              parseInt(documentEl.querySelector("Size").textContent || "0")
-            )
-          );
-        sizeCell.appendChild(sizeCellText);
-
-        const actionsText = rowEl.insertCell();
-        actionsText.appendChild(
-          this.generateActionCellContent(
-            projectId,
-            documentEl.querySelector("Key").textContent
+      const keyCell = rowEl.insertCell(),
+        keyCellText = document.createTextNode(
+          decodeURIComponent(
+            documentEl.querySelector("Key").textContent.split("/").pop()
           )
         );
-      });
-    } else {
-      document.querySelector("tr.no_data").style.display = "";
-    }
+      keyCell.appendChild(keyCellText);
+
+      const lastModifiedCell = rowEl.insertCell(),
+        lastModifiedCellText = document.createTextNode(
+          new Date(
+            documentEl.querySelector("LastModified").textContent
+          ).toLocaleDateString()
+        );
+      lastModifiedCell.appendChild(lastModifiedCellText);
+
+      const sizeCell = rowEl.insertCell(),
+        sizeCellText = document.createTextNode(
+          formatBytes(
+            parseInt(documentEl.querySelector("Size").textContent || "0")
+          )
+        );
+      sizeCell.appendChild(sizeCellText);
+
+      const actionsText = rowEl.insertCell();
+      actionsText.appendChild(
+        this.generateActionCellContent(
+          projectId,
+          documentEl.querySelector("Key").textContent
+        )
+      );
+      this.dataRows.push(rowEl);
+    });
+    this.toggleLoading(false);
+  }
+
+  generateLoadingRow() {
+    const row = document.createElement("tr");
+    row.classList.add("loading");
+    this.tHead.querySelectorAll("th").forEach(() => {
+      const cell = document.createElement("td");
+      const div = document.createElement("div");
+      div.innerHTML = "&nbsp;";
+      cell.appendChild(div);
+      row.appendChild(cell);
+    });
+    return row;
+  }
+
+  generateNoDataRow() {
+    const cell = document.createElement("td");
+    cell.textContent = window.gettext("No file yet");
+    cell.setAttribute("colspan", "4");
+    const row = document.createElement("tr");
+    row.classList.add("no_data");
+    row.appendChild(cell);
+    return row;
   }
 
   generateActionCellContent(projectId, key) {

@@ -31,7 +31,7 @@ export class FileManager {
     ) {
       return;
     }
-    this.fileTable().toggleLoading(true);
+    this.fileTable.toggleLoading(true);
     try {
       await this.s3Service.deleteObject(projectId, key);
       this.handleDeleteSuccess(projectId, key);

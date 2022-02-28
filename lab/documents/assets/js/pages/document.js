@@ -2,7 +2,6 @@
 
 import "@gouvfr/dsfr/dist/component/component.min.css";
 import "@gouvfr/dsfr/dist/component/upload/upload.min.css";
-import "../../css/project-documents.css";
 
 import { FileTable } from "../../../../assets/js/components/file-table.js";
 import { FileUploadForm } from "../../../../assets/js/components/file-upload-form.js";

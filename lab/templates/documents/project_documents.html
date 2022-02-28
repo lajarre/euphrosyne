@@ -6,6 +6,7 @@
 {% block content_subtitle %}{% endblock %}
 
 {% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/components/file_table.css" %}">
 <link rel="stylesheet" type="text/css" href="{% static "document.css" %}">
 {% endblock %}
 
@@ -25,11 +26,11 @@ Project {{ project_name }} documents
 {% endblocktranslate %}</h1>
 <div id="content-main">
     <ul class="messagelist"></ul>
-    {% include "components/file_upload_form.html" with attrs=file_upload_form.attrs %}
+    {% include "components/file_upload_form.html" with component=file_upload_form %}
     <div class="documents-wrapper">
         <h2>{% translate 'Documents' %}</h2>
         <div>
-            {% include "components/file_table.html" with attrs=file_table.attrs %}
+            {% include "components/file_table.html" with component=file_table %}
         </div>
     </div>
 </div>

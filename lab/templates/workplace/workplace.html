@@ -6,7 +6,9 @@
 {% block content_subtitle %}{% endblock %}
 
 {% block extrastyle %}{{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "document.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "css/components/file_table.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "workplace.css" %}">
+
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -26,12 +28,18 @@
     <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-12 fr-col-lg-6">
-                {% include "components/file_upload_form.html" with attrs=raw_data_upload_form.attrs %}
-                {% include "components/file_table.html" with attrs=raw_data_table.attrs %}
+                <div class="bg-white fr-p-3v">
+                    <h3>{% trans "Raw data" %}</h2>
+                    {% include "components/file_upload_form.html" with component=raw_data_upload_form %}
+                    {% include "components/file_table.html" with component=raw_data_table %}
+                </div>
             </div>
             <div class="fr-col-12 fr-col-lg-6">
-                {% include "components/file_upload_form.html" with attrs=processed_data_upload_form.attrs %}
-                {% include "components/file_table.html" with attrs=processed_data_table.attrs %}                
+                <div class="bg-white fr-p-3v">
+                    <h3>{% trans "Processed data" %}</h2>
+                    {% include "components/file_upload_form.html" with component=processed_data_upload_form %}
+                    {% include "components/file_table.html" with component=processed_data_table %}                
+                </div>
             </div>
         </div>
     </div>
