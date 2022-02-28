@@ -8,17 +8,17 @@ from lab.object_storage import (
 )
 from lab.permissions import project_membership_required
 
-from .object_storage import (
-    create_presigned_document_list_url,
-    create_presigned_document_upload_post,
+from ..object_storage import (
+    create_presigned_processed_data_list_url,
+    create_presigned_processed_data_upload_post,
 )
 
 
 @login_required
 @project_membership_required
 @require_http_methods(["POST"])
-def presigned_document_list_url_view(request, project_id: int):
-    url = create_presigned_document_list_url(project_id)
+def presigned_processed_data_list_url_view(request, project_id: int):
+    url = create_presigned_processed_data_list_url(project_id)
     data = {"url": url}
     return JsonResponse(data)
 
@@ -26,8 +26,8 @@ def presigned_document_list_url_view(request, project_id: int):
 @login_required
 @project_membership_required
 @require_http_methods(["POST"])
-def presigned_document_upload_url_view(request, project_id: int):
-    url = create_presigned_document_upload_post(project_id)
+def presigned_processed_data_upload_url_view(request, project_id: int):
+    url = create_presigned_processed_data_upload_post(project_id)
     data = {"url": url}
     return JsonResponse(data)
 
@@ -35,13 +35,13 @@ def presigned_document_upload_url_view(request, project_id: int):
 @login_required
 @project_membership_required
 @require_http_methods(["POST"])
-def presigned_document_download_url_view(request, project_id: int):
+def presigned_processed_data_download_url_view(request, project_id: int):
     key = request.GET.get("key", None)
     if not key:
         return JsonResponse(
             data={"message": "`key` missing from query params"}, status=400
         )
-    if not key.startswith(f"projects/{project_id}/documents/"):
+    if not key.startswith(f"projects/{project_id}/processed_data/"):
         return JsonResponse(
             data={"message": "`key` does not match with project ID"}, status=400
         )
@@ -53,13 +53,13 @@ def presigned_document_download_url_view(request, project_id: int):
 @login_required
 @project_membership_required
 @require_http_methods(["POST"])
-def presigned_document_delete_url_view(request, project_id: int):
+def presigned_processed_data_delete_url_view(request, project_id: int):
     key = request.GET.get("key", None)
     if not key:
         return JsonResponse(
             data={"message": "`key` missing from query params"}, status=400
         )
-    if not key.startswith(f"projects/{project_id}/documents/"):
+    if not key.startswith(f"projects/{project_id}/processed_data/"):
         return JsonResponse(
             data={"message": "`key` does not match with project ID"}, status=400
         )

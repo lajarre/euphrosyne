@@ -1,7 +1,8 @@
 import enum
+from functools import wraps
 from typing import Optional
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404
 
@@ -55,3 +56,20 @@ class ProjectMembershipRequiredMixin(StaffUserRequiredMixin):
         ):
             return self.handle_no_permission()
         return response
+
+
+def project_membership_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, project_id: int):
+        try:
+            project = Project.objects.get(pk=project_id)
+        except Project.DoesNotExist:
+            return JsonResponse(data={}, status=404)
+        if (
+            not is_lab_admin(request.user)
+            and not project.members.filter(id=request.user.id).exists()
+        ):
+            return JsonResponse(data={}, status=403)
+        return view_func(request, project_id)
+
+    return _wrapped_view
