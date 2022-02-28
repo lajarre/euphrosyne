@@ -2,9 +2,6 @@
  * Handles file upload to s3 bucket
  */
 "use strict";
-import { fetchUploadPresignedUrl } from "../presigned-url-service.js";
-import { uploadObject } from "../s3-service.js";
-import { displayMessage } from "../../../assets/js/utils.js";
 
 const FILES_MAX_SIZE = 30 * 1024 * 1000; // 30 MB
 const MAX_SIZE_FORMATTED = "30 MB";
@@ -43,6 +40,7 @@ const ALLOWED_FILE_FORMATS = [
   "xml",
   "zip",
 ];
+
 export class FileUploadForm extends HTMLFormElement {
   static init() {
     customElements.define("file-upload-form", FileUploadForm, {
@@ -55,27 +53,15 @@ export class FileUploadForm extends HTMLFormElement {
     this.addEventListener("change", this.validateFileInput);
     this.addEventListener("submit", (event) => {
       event.preventDefault();
-      event.target.querySelector("input[type='submit']").disabled = true;
-      this.uploadDocuments();
     });
   }
 
-  async uploadDocuments() {
-    const projectId = this.getAttribute("project-id");
-    let response;
-    try {
-      response = await fetchUploadPresignedUrl(projectId);
-    } catch (error) {
-      displayMessage(
-        window.gettext(
-          "An error has occured while generating the presigned URL. Please contact the support team."
-        ),
-        "error"
-      );
-      this.querySelector("input[type='submit']").disabled = false;
-      throw error;
-    }
-    this.handlePresignedURLResponse(response);
+  get files() {
+    return this.querySelector("input[type='file']").files;
+  }
+
+  get projectId() {
+    return this.getAttribute("project-id");
   }
 
   validateFileInput(event) {
@@ -112,40 +98,7 @@ export class FileUploadForm extends HTMLFormElement {
     }
   }
 
-  async handlePresignedURLResponse(response) {
-    /**
-     * On server response, uses the presigned URL to upload files
-     * to s3 bucket. Displays messages to user on success / error.
-     */
-    const { url, fields } = response;
-    const files = document.querySelector("input[type='file']").files;
-
-    const results = await Promise.all(
-      Array.from(files).map((file) => {
-        const { name } = file;
-        return uploadObject(file, url, fields)
-          .then(() => {
-            this.dispatchEvent(
-              new CustomEvent("upload-success", {
-                detail: { name },
-              })
-            );
-            return true;
-          })
-          .catch(() => {
-            this.dispatchEvent(
-              new CustomEvent("upload-error", {
-                detail: { name },
-              })
-            );
-            return false;
-          });
-      })
-    );
-    if (results.indexOf(true) !== -1) {
-      this.dispatchEvent(new Event("upload-completed"));
-    }
-    this.querySelector("input[type='submit']").disabled = false;
-    this.reset();
+  toggleSubmitButton(disabled) {
+    this.querySelector("input[type='submit']").disabled = disabled;
   }
 }
