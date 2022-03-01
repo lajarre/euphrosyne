@@ -8,21 +8,18 @@ export class FileManager {
     this.s3Service = s3Service;
   }
 
-  async fetchFiles(projectId) {
+  async fetchFiles() {
     this.fileTable.toggleLoading(true);
-    const keys = await this.s3Service.listObjectsV2(projectId);
+    const keys = await this.s3Service.listObjectsV2();
     this.fileTable.updateFiles(keys);
   }
 
-  async dowloadFile(projectId, key) {
-    const url = await this.presignedUrlService.fetchDownloadPresignedURL(
-      projectId,
-      key
-    );
+  async dowloadFile(key) {
+    const url = await this.presignedUrlService.fetchDownloadPresignedURL(key);
     window.open(url, "_blank");
   }
 
-  async deleteFile(projectId, key) {
+  async deleteFile(key) {
     if (
       !window.confirm(
         window.interpolate(window.gettext("Delete the document %s ?"), [
@@ -34,19 +31,19 @@ export class FileManager {
     }
     this.fileTable.toggleLoading(true);
     try {
-      await this.s3Service.deleteObject(projectId, key);
-      this.handleDeleteSuccess(projectId, key);
+      await this.s3Service.deleteObject(key);
+      this.handleDeleteSuccess(key);
     } catch (error) {
       this.handleDeleteError(key);
       throw error;
     }
   }
 
-  async uploadFiles(projectId, files) {
+  async uploadFiles(files) {
     let results;
     this.fileForm.toggleSubmitButton(true);
     try {
-      results = await this.s3Service.uploadObjects(projectId, files);
+      results = await this.s3Service.uploadObjects(files);
     } catch (error) {
       displayMessage(
         window.gettext(
@@ -76,7 +73,7 @@ export class FileManager {
     });
     if (results.map((result) => result.status === "fulfilled").indexOf !== -1) {
       this.fileTable.toggleLoading(true);
-      this.fetchFiles(projectId);
+      this.fileForm.dispatchEvent(new Event("upload-completed"));
     }
     this.fileForm.toggleSubmitButton(false);
     this.fileForm.reset();
@@ -92,8 +89,8 @@ export class FileManager {
     this.fileTable.toggleLoading(false);
   }
 
-  handleDeleteSuccess(projectId, key) {
-    this.fetchFiles(projectId);
+  handleDeleteSuccess(key) {
+    this.fetchFiles();
     displayMessage(
       window.interpolate(window.gettext("File %s has been removed."), [
         key.split("/").pop(),

@@ -5,8 +5,8 @@ export class S3Service {
     this.presignedUrlService = presignedUrlService;
   }
 
-  async listObjectsV2(projectId) {
-    const url = await this.presignedUrlService.fetchListPresignedUrl(projectId);
+  async listObjectsV2() {
+    const url = await this.presignedUrlService.fetchListPresignedUrl();
     const response = await fetch(url, {
       method: "GET",
     });
@@ -23,11 +23,8 @@ export class S3Service {
     }
   }
 
-  async deleteObject(projectId, key) {
-    const url = await this.presignedUrlService.fetchDeletePresignedURL(
-      projectId,
-      key
-    );
+  async deleteObject(key) {
+    const url = await this.presignedUrlService.fetchDeletePresignedURL(key);
     const response = await fetch(url, {
       method: "DELETE",
     });
@@ -40,9 +37,9 @@ export class S3Service {
     }
   }
 
-  async uploadObjects(projectId, files) {
+  async uploadObjects(files) {
     const { url, fields } =
-      await this.presignedUrlService.fetchUploadPresignedUrl(projectId);
+      await this.presignedUrlService.fetchUploadPresignedUrl();
     return await Promise.allSettled(
       Array.from(files).map((file) => {
         return this.uploadObject(file, url, fields);

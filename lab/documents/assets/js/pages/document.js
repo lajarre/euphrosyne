@@ -12,7 +12,9 @@ import { S3Service } from "../../../../assets/js/s3-service.js";
 FileTable.init();
 FileUploadForm.init();
 
-const presignedUrlService = new PresignedUrlService();
+const projectId = parseInt(document.URL.split("/").reverse()[1]);
+
+const presignedUrlService = new PresignedUrlService(projectId);
 const s3Service = new S3Service(presignedUrlService);
 
 const documentTable = document.getElementById("document_list");
@@ -25,22 +27,23 @@ const fileManager = new FileManager(
   s3Service
 );
 
-const projectId = parseInt(document.URL.split("/").reverse()[1]);
-
 documentTable.addEventListener("download-click", (e) => {
   const { key } = e.detail;
-  fileManager.downloadFile(projectId, key);
+  fileManager.downloadFile(key);
 });
 documentTable.addEventListener("delete-click", (e) => {
   const { key } = e.detail;
-  fileManager.deleteFile(projectId, key);
+  fileManager.deleteFile(key);
 });
 
 documentForm.addEventListener("submit", (event) => {
   const { files } = event.target.elements.namedItem("files");
-  fileManager.uploadFiles(projectId, files);
+  fileManager.uploadFiles(files);
+});
+documentForm.addEventListener("upload-completed", () => {
+  fileManager.fetchFiles();
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  fileManager.fetchFiles(projectId);
+  fileManager.fetchFiles();
 });

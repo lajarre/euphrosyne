@@ -60,7 +60,7 @@ class ProjectMembershipRequiredMixin(StaffUserRequiredMixin):
 
 def project_membership_required(view_func):
     @wraps(view_func)
-    def _wrapped_view(request, project_id: int):
+    def _wrapped_view(request, project_id: int, *args, **kwargs):
         try:
             project = Project.objects.get(pk=project_id)
         except Project.DoesNotExist:
@@ -70,6 +70,6 @@ def project_membership_required(view_func):
             and not project.members.filter(id=request.user.id).exists()
         ):
             return JsonResponse(data={}, status=403)
-        return view_func(request, project_id)
+        return view_func(request, project_id, *args, **kwargs)
 
     return _wrapped_view

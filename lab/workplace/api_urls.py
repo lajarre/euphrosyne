@@ -13,12 +13,12 @@ from .api_views import (
 
 urlpatterns = [
     path(
-        "project/<project_id>/workplace/processed_data/presigned_post",
+        "project/<project_id>/workplace/<run_id>/processed_data/presigned_post",
         presigned_processed_data_upload_url_view,
         name="presigned_processed_data_upload_url",
     ),
     path(
-        "project/<project_id>/workplace/processed_data/presigned_list_url",
+        "project/<project_id>/workplace/<run_id>/processed_data/presigned_list_url",
         presigned_processed_data_list_url_view,
         name="presigned_processed_data_list_url",
     ),
@@ -33,12 +33,12 @@ urlpatterns = [
         name="presigned_processed_data_delete_url",
     ),
     path(
-        "project/<project_id>/workplace/raw_data/presigned_post",
+        "project/<project_id>/workplace/<run_id>/raw_data/presigned_post",
         presigned_raw_data_upload_url_view,
         name="presigned_raw_data_upload_url",
     ),
     path(
-        "project/<project_id>/workplace/raw_data/presigned_list_url",
+        "project/<project_id>/workplace/<run_id>/raw_data/presigned_list_url",
         presigned_raw_data_list_url_view,
         name="presigned_raw_data_list_url",
     ),

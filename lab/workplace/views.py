@@ -22,19 +22,33 @@ class WorkplaceView(ProjectMembershipRequiredMixin, TemplateView):
         return super().dispatch(request, project_id, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        runs = tuple(
+            {
+                "id": id,
+                "label": label,
+                "raw_data_table": {"attrs": {"id": f"run-{id}-raw-data-table"}},
+                "processed_data_table": {
+                    "attrs": {"id": f"run-{id}-processed-data-table"}
+                },
+                "raw_data_upload_form": {
+                    "attrs": {
+                        "id": f"run-{id}-raw-data-upload-form",
+                        "project-id": self.project.id,
+                    }
+                },
+                "processed_data_upload_form": {
+                    "attrs": {
+                        "id": f"run-{id}-processed-data-upload-form",
+                        "project-id": self.project.id,
+                    }
+                },
+            }
+            for (id, label) in self.project.runs.values_list("id", "label")
+        )
         return {
             **super().get_context_data(**kwargs),
             **site.each_context(self.request),
             "project": self.project,
-            "raw_data_table": {"attrs": {"id": "raw-data-table"}},
-            "processed_data_table": {"attrs": {"id": "processed-data-table"}},
-            "raw_data_upload_form": {
-                "attrs": {"id": "raw-data-upload-form", "project-id": self.project.id}
-            },
-            "processed_data_upload_form": {
-                "attrs": {
-                    "id": "processed-data-upload-form",
-                    "project-id": self.project.id,
-                }
-            },
+            "subtitle": "{} | {}".format(self.project.name, _("Workplace")),
+            "runs": runs,
         }
