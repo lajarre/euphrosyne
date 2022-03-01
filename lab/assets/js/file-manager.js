@@ -28,7 +28,7 @@ export class FileManager {
     this.fileTable.updateFiles(keys);
   }
 
-  async dowloadFile(key) {
+  async downloadFile(key) {
     const url = await this.presignedUrlService.fetchDownloadPresignedURL(key);
     window.open(url, "_blank");
   }
