@@ -1,5 +1,3 @@
-import { formatBytes } from "../utils.js";
-
 export class FileTable extends HTMLTableElement {
   constructor() {
     super();
@@ -7,69 +5,50 @@ export class FileTable extends HTMLTableElement {
     this.dataRows = [];
   }
 
-  get loadingRow() {
-    return this.querySelector("tr.loading");
-  }
-
   static init() {
     customElements.define("file-table", FileTable, { extends: "table" });
   }
 
-  toggleLoading(active) {
+  showLoading(active) {
     if (active) {
       this.tBodies[0].querySelectorAll("tr").forEach((row) => row.remove());
       this.tBodies[0].appendChild(this.generateLoadingRow());
-    } else {
-      this.loadingRow.remove();
-      if (this.dataRows.length > 0) {
-        this.dataRows.forEach((row) => {
-          this.tBodies[0].appendChild(row);
-        });
-      } else {
-        this.tBodies[0].appendChild(this.generateNoDataRow());
-      }
     }
   }
 
-  updateFiles(documentXMLEls) {
+  displayFiles() {
+    this.tBodies[0].querySelectorAll("tr").forEach((row) => row.remove());
+    if (this.dataRows.length > 0) {
+      this.dataRows.forEach((row) => {
+        this.tBodies[0].appendChild(row);
+      });
+    } else {
+      this.tBodies[0].appendChild(this.generateNoDataRow());
+    }
+  }
+
+  setFiles(files) {
     this.dataRows = [];
-    documentXMLEls.forEach((documentEl) => {
+    files.forEach((file) => {
       const rowEl = this.insertRow(-1);
       rowEl.classList.add("document-row");
 
       const keyCell = rowEl.insertCell(),
-        keyCellText = document.createTextNode(
-          decodeURIComponent(
-            documentEl.querySelector("Key").textContent.split("/").pop()
-          )
-        );
+        keyCellText = document.createTextNode(file.name);
       keyCell.appendChild(keyCellText);
 
       const lastModifiedCell = rowEl.insertCell(),
-        lastModifiedCellText = document.createTextNode(
-          new Date(
-            documentEl.querySelector("LastModified").textContent
-          ).toLocaleDateString()
-        );
+        lastModifiedCellText = document.createTextNode(file.lastModified);
       lastModifiedCell.appendChild(lastModifiedCellText);
 
       const sizeCell = rowEl.insertCell(),
-        sizeCellText = document.createTextNode(
-          formatBytes(
-            parseInt(documentEl.querySelector("Size").textContent || "0")
-          )
-        );
+        sizeCellText = document.createTextNode(file.size);
       sizeCell.appendChild(sizeCellText);
 
       const actionsText = rowEl.insertCell();
-      actionsText.appendChild(
-        this.generateActionCellContent(
-          documentEl.querySelector("Key").textContent
-        )
-      );
+      actionsText.appendChild(this.generateActionCellContent(file.key));
       this.dataRows.push(rowEl);
     });
-    this.toggleLoading(false);
   }
 
   generateLoadingRow() {
