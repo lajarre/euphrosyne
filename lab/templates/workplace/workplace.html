@@ -47,7 +47,7 @@
                     <div class="fr-col-12 fr-col-lg-6">
                         <div class="bg-white fr-p-3v">
                             <h3>{% trans "Raw data" %}</h2>
-                            {% if user.is_lab_admin %}
+                            {% if user.is_lab_admin or user.is_superuser %}
                             {% include "components/file_upload_form.html" with component=run.raw_data_upload_form %}
                             {% endif %}
                             {% include "components/file_table.html" with component=run.raw_data_table %}
@@ -56,7 +56,7 @@
                     <div class="fr-col-12 fr-col-lg-6">
                         <div class="bg-white fr-p-3v">
                             <h3>{% trans "Processed data" %}</h2>
-                            {% if user.is_lab_admin %}
+                            {% if user.is_lab_admin or user.is_superuser %}
                             {% include "components/file_upload_form.html" with component=run.processed_data_upload_form %}
                             {% endif %}
                             {% include "components/file_table.html" with component=run.processed_data_table %}                
