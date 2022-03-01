@@ -9,8 +9,9 @@ export class FileManager {
   }
 
   async fetchFiles(projectId) {
+    this.fileTable.toggleLoading(true);
     const keys = await this.s3Service.listObjectsV2(projectId);
-    this.fileTable.updateFiles(projectId, keys);
+    this.fileTable.updateFiles(keys);
   }
 
   async dowloadFile(projectId, key) {

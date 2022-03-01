@@ -20,17 +20,17 @@ export function initProcessedData() {
   );
 
   const projectId = parseInt(document.URL.split("/").reverse()[1]);
+
   fileTable.addEventListener("download-click", (e) => {
-    const { projectId, key } = e.detail;
+    const { key } = e.detail;
     fileManager.downloadFile(projectId, key);
   });
   fileTable.addEventListener("delete-click", (e) => {
-    const { projectId, key } = e.detail;
+    const { key } = e.detail;
     fileManager.deleteFile(projectId, key);
   });
 
   fileForm.addEventListener("submit", (event) => {
-    const { projectId } = event.target;
     const { files } = event.target.elements.namedItem("files");
     fileManager.uploadFiles(projectId, files);
   });

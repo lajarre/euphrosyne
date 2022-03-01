@@ -26,22 +26,21 @@ const fileManager = new FileManager(
 );
 
 const projectId = parseInt(document.URL.split("/").reverse()[1]);
+
 documentTable.addEventListener("download-click", (e) => {
-  const { projectId, key } = e.detail;
+  const { key } = e.detail;
   fileManager.downloadFile(projectId, key);
 });
 documentTable.addEventListener("delete-click", (e) => {
-  const { projectId, key } = e.detail;
+  const { key } = e.detail;
   fileManager.deleteFile(projectId, key);
 });
 
 documentForm.addEventListener("submit", (event) => {
-  const { projectId } = event.target;
   const { files } = event.target.elements.namedItem("files");
   fileManager.uploadFiles(projectId, files);
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  documentTable.toggleLoading(true);
   fileManager.fetchFiles(projectId);
 });

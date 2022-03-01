@@ -31,7 +31,7 @@ export class FileTable extends HTMLTableElement {
     }
   }
 
-  updateFiles(projectId, documentXMLEls) {
+  updateFiles(documentXMLEls) {
     this.dataRows = [];
     documentXMLEls.forEach((documentEl) => {
       const rowEl = this.insertRow(-1);
@@ -64,7 +64,6 @@ export class FileTable extends HTMLTableElement {
       const actionsText = rowEl.insertCell();
       actionsText.appendChild(
         this.generateActionCellContent(
-          projectId,
           documentEl.querySelector("Key").textContent
         )
       );
@@ -96,7 +95,7 @@ export class FileTable extends HTMLTableElement {
     return row;
   }
 
-  generateActionCellContent(projectId, key) {
+  generateActionCellContent(key) {
     const downloadButton = document.createElement("button");
     downloadButton.classList.add(
       "download-btn",
@@ -108,7 +107,7 @@ export class FileTable extends HTMLTableElement {
     downloadButton.title = window.gettext("Download file");
     downloadButton.addEventListener("click", () => {
       this.dispatchEvent(
-        new CustomEvent("download-click", { detail: { projectId, key } })
+        new CustomEvent("download-click", { detail: { key } })
       );
     });
     const downloadListItem = document.createElement("li");
@@ -124,9 +123,7 @@ export class FileTable extends HTMLTableElement {
     deleteButton.textContent = window.gettext("Delete file");
     deleteButton.title = window.gettext("Delete file");
     deleteButton.addEventListener("click", () =>
-      this.dispatchEvent(
-        new CustomEvent("delete-click", { detail: { projectId, key } })
-      )
+      this.dispatchEvent(new CustomEvent("delete-click", { detail: { key } }))
     );
     const deleteListItem = document.createElement("li");
     deleteListItem.appendChild(deleteButton);
