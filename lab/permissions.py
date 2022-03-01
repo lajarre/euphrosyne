@@ -73,3 +73,17 @@ def project_membership_required(view_func):
         return view_func(request, project_id, *args, **kwargs)
 
     return _wrapped_view
+
+
+def is_lab_admin_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, project_id: int, *args, **kwargs):
+        try:
+            project = Project.objects.get(pk=project_id)
+        except Project.DoesNotExist:
+            return JsonResponse(data={}, status=404)
+        if not is_lab_admin(request.user):
+            return JsonResponse(data={}, status=403)
+        return view_func(request, project_id, *args, **kwargs)
+
+    return _wrapped_view

@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
 from ..models import Project
-from ..permissions import ProjectMembershipRequiredMixin
+from ..permissions import ProjectMembershipRequiredMixin, is_lab_admin
 
 
 class WorkplaceView(ProjectMembershipRequiredMixin, TemplateView):
@@ -26,9 +26,13 @@ class WorkplaceView(ProjectMembershipRequiredMixin, TemplateView):
             {
                 "id": id,
                 "label": label,
-                "raw_data_table": {"attrs": {"id": f"run-{id}-raw-data-table"}},
+                "raw_data_table": {
+                    "attrs": {"id": f"run-{id}-raw-data-table"},
+                    "can_delete": is_lab_admin(self.request.user),
+                },
                 "processed_data_table": {
-                    "attrs": {"id": f"run-{id}-processed-data-table"}
+                    "attrs": {"id": f"run-{id}-processed-data-table"},
+                    "can_delete": is_lab_admin(self.request.user),
                 },
                 "raw_data_upload_form": {
                     "attrs": {

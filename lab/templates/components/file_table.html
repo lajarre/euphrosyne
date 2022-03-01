@@ -1,5 +1,5 @@
 {% load i18n %}
-<table is="file-table" {% if component.attrs %}{% include "attrs.html" with attrs=component.attrs %}{% endif %}>
+<table is="file-table" data-can-delete="{{ component.can_delete|yesno:"true,false" }}" {% if component.attrs %}{% include "attrs.html" with attrs=component.attrs %}{% endif %}>
     <thead>
         <tr>  
             <th scope="col" class="column-name">

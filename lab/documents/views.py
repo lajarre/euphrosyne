@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
+from lab.permissions import is_lab_admin
 from shared.view_mixins import StaffUserRequiredMixin
 
 from ..models import Project
@@ -28,7 +29,10 @@ class ProjectDocumentsView(StaffUserRequiredMixin, TemplateView):
             **site.each_context(self.request),
             "subtitle": "{} | {}".format(self.project.name, _("Upload documents")),
             "project": self.project,
-            "file_table": {"attrs": {"id": "document_list"}},
+            "file_table": {
+                "attrs": {"id": "document_list"},
+                "can_delete": True,
+            },
             "file_upload_form": {
                 "attrs": {"id": "upload-form", "project-id": self.project.id},
                 "hint_text": _(

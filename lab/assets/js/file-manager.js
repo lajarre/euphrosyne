@@ -6,6 +6,20 @@ export class FileManager {
     this.fileTable = fileTable;
     this.presignedUrlService = presignedUrlService;
     this.s3Service = s3Service;
+
+    this.fileTable.addEventListener("download-click", (e) => {
+      const { key } = e.detail;
+      this.downloadFile(key);
+    });
+    this.fileTable.addEventListener("delete-click", (e) => {
+      const { key } = e.detail;
+      this.deleteFile(key);
+    });
+
+    this.fileForm?.addEventListener("submit", (event) => {
+      const { files } = event.target.elements.namedItem("files");
+      this.uploadFiles(files);
+    });
   }
 
   async fetchFiles() {
@@ -73,7 +87,7 @@ export class FileManager {
     });
     if (results.map((result) => result.status === "fulfilled").indexOf !== -1) {
       this.fileTable.toggleLoading(true);
-      this.fileForm.dispatchEvent(new Event("upload-completed"));
+      this.fetchFiles();
     }
     this.fileForm.toggleSubmitButton(false);
     this.fileForm.reset();

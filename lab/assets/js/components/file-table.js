@@ -96,6 +96,12 @@ export class FileTable extends HTMLTableElement {
   }
 
   generateActionCellContent(key) {
+    const unorderedList = document.createElement("ul");
+    unorderedList.classList.add(
+      "fr-btns-group",
+      "fr-btns-group--inline",
+      "fr-btns-group--sm"
+    );
     const downloadButton = document.createElement("button");
     downloadButton.classList.add(
       "download-btn",
@@ -112,30 +118,25 @@ export class FileTable extends HTMLTableElement {
     });
     const downloadListItem = document.createElement("li");
     downloadListItem.appendChild(downloadButton);
-
-    const deleteButton = document.createElement("button");
-    deleteButton.classList.add(
-      "delete-btn",
-      "fr-btn",
-      "fr-fi-delete-line",
-      "fr-btn--secondary"
-    );
-    deleteButton.textContent = window.gettext("Delete file");
-    deleteButton.title = window.gettext("Delete file");
-    deleteButton.addEventListener("click", () =>
-      this.dispatchEvent(new CustomEvent("delete-click", { detail: { key } }))
-    );
-    const deleteListItem = document.createElement("li");
-    deleteListItem.appendChild(deleteButton);
-
-    const unorderedList = document.createElement("ul");
-    unorderedList.classList.add(
-      "fr-btns-group",
-      "fr-btns-group--inline",
-      "fr-btns-group--sm"
-    );
     unorderedList.appendChild(downloadListItem);
-    unorderedList.appendChild(deleteListItem);
+
+    if (this.dataset.canDelete === "true") {
+      const deleteButton = document.createElement("button");
+      deleteButton.classList.add(
+        "delete-btn",
+        "fr-btn",
+        "fr-fi-delete-line",
+        "fr-btn--secondary"
+      );
+      deleteButton.textContent = window.gettext("Delete file");
+      deleteButton.title = window.gettext("Delete file");
+      deleteButton.addEventListener("click", () =>
+        this.dispatchEvent(new CustomEvent("delete-click", { detail: { key } }))
+      );
+      const deleteListItem = document.createElement("li");
+      deleteListItem.appendChild(deleteButton);
+      unorderedList.appendChild(deleteListItem);
+    }
 
     return unorderedList;
   }

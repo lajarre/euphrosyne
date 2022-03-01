@@ -2,7 +2,7 @@
 
 import { getCSRFToken } from "../../../assets/js/utils.js";
 
-export class PresignedUrlService {
+export class DocumentPresignedUrlService {
   constructor(projectId) {
     this.projectId = projectId;
   }

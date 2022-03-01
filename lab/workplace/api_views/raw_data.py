@@ -6,7 +6,7 @@ from lab.object_storage import (
     create_presigned_delete_url,
     create_presigned_download_url,
 )
-from lab.permissions import project_membership_required
+from lab.permissions import is_lab_admin_required, project_membership_required
 
 from ..object_storage import (
     create_presigned_raw_data_list_url,
@@ -24,7 +24,7 @@ def presigned_raw_data_list_url_view(request, project_id: int, run_id: int):
 
 
 @login_required
-@project_membership_required
+@is_lab_admin_required
 @require_http_methods(["POST"])
 def presigned_raw_data_upload_url_view(request, project_id: int, run_id: int):
     url = create_presigned_raw_data_upload_post(project_id, run_id)
@@ -51,7 +51,7 @@ def presigned_raw_data_download_url_view(request, project_id: int):
 
 
 @login_required
-@project_membership_required
+@is_lab_admin_required
 @require_http_methods(["POST"])
 def presigned_raw_data_delete_url_view(request, project_id: int):
     key = request.GET.get("key", None)
