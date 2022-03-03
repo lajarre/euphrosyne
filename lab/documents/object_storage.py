@@ -1,5 +1,3 @@
-from boto3.session import Session
-from botocore.config import Config
 from django.conf import settings
 
 from lab.object_storage import client

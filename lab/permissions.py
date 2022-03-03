@@ -4,7 +4,6 @@ from typing import Optional
 
 from django.http import HttpResponse, JsonResponse
 from django.http.request import HttpRequest
-from django.shortcuts import get_object_or_404
 
 from euphro_auth.models import User
 from lab.models import Project
@@ -52,7 +51,9 @@ class ProjectMembershipRequiredMixin(StaffUserRequiredMixin):
         response = super().dispatch(request, *args, **kwargs)
         if (
             not is_lab_admin(request.user)
-            and not Project.objects.filter(members__id=request.user.id).exists()
+            and not Project.objects.filter(
+                id=project_id, members__id=request.user.id
+            ).exists()
         ):
             return self.handle_no_permission()
         return response
@@ -78,10 +79,6 @@ def project_membership_required(view_func):
 def is_lab_admin_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, project_id: int, *args, **kwargs):
-        try:
-            project = Project.objects.get(pk=project_id)
-        except Project.DoesNotExist:
-            return JsonResponse(data={}, status=404)
         if not is_lab_admin(request.user):
             return JsonResponse(data={}, status=403)
         return view_func(request, project_id, *args, **kwargs)
