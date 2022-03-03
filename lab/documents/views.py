@@ -6,12 +6,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
-from shared.view_mixins import StaffUserRequiredMixin
+from lab.permissions import ProjectMembershipRequiredMixin
 
 from ..models import Project
 
 
-class ProjectDocumentsView(StaffUserRequiredMixin, TemplateView):
+class ProjectDocumentsView(ProjectMembershipRequiredMixin, TemplateView):
     template_name = "documents/project_documents.html"
     project: Project
 
@@ -20,7 +20,7 @@ class ProjectDocumentsView(StaffUserRequiredMixin, TemplateView):
         self, request: HttpRequest, project_id: int, *args, **kwargs
     ) -> HttpResponse:
         self.project = get_object_or_404(Project, pk=project_id)
-        return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, project_id, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         return {
