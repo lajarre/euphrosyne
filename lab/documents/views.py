@@ -35,11 +35,9 @@ class ProjectDocumentsView(StaffUserRequiredMixin, TemplateView):
             "file_upload_form": {
                 "attrs": {"id": "upload-form", "project-id": self.project.id},
                 "hint_text": _(
-                    (
-                        "Max size allowed : 30 Mo. ",
-                        "Multiple files allowed. ",
-                        "Allowed files: images, documents and archives.",
-                    )
+                    "Max size allowed : 30 Mo. "
+                    "Multiple files allowed. "
+                    "Allowed files: images, documents and archives."
                 ),
             },
         }

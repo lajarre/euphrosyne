@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-28 18:35+0100\n"
+"POT-Creation-Date: 2022-03-03 15:33+0100\n"
 "PO-Revision-Date: 2021-09-09 19:04+0200\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -536,6 +536,11 @@ msgstr "Choisissez un lot d'objets"
 
 msgid "Workplace"
 msgstr "Workplace"
+
+#, fuzzy
+#| msgid "Raw data"
+msgid "Runs data"
+msgstr "Données brutes"
 
 msgid "Raw data"
 msgstr "Données brutes"
