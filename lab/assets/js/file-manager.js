@@ -1,13 +1,4 @@
-import { displayMessage, formatBytes } from "./utils.js";
-
-class S3File {
-  constructor(key, lastModified, size) {
-    this.name = key.split("/").pop();
-    this.key = key;
-    this.lastModified = lastModified;
-    this.size = size;
-  }
-}
+import { displayMessage } from "./utils.js";
 
 export class FileManager {
   constructor(fileForm, fileTable, presignedUrlService, s3Service) {
@@ -32,22 +23,9 @@ export class FileManager {
   }
 
   async fetchFiles() {
-    this.fileTable.showLoading(true);
-    const documentXMLEls = await this.s3Service.listObjectsV2();
-    this.fileTable.setFiles(
-      Array.from(documentXMLEls).map(
-        (documentEl) =>
-          new S3File(
-            decodeURIComponent(documentEl.querySelector("Key").textContent),
-            new Date(
-              documentEl.querySelector("LastModified").textContent
-            ).toLocaleDateString(),
-            formatBytes(
-              parseInt(documentEl.querySelector("Size").textContent || "0")
-            )
-          )
-      )
-    );
+    this.fileTable.showLoading();
+    const s3Files = await this.s3Service.listObjectsV2();
+    this.fileTable.setFiles(s3Files);
     this.fileTable.displayFiles();
   }
 
@@ -66,7 +44,7 @@ export class FileManager {
     ) {
       return;
     }
-    this.fileTable.showLoading(true);
+    this.fileTable.showLoading();
     try {
       await this.s3Service.deleteObject(key);
       this.handleDeleteSuccess(key);
@@ -109,7 +87,7 @@ export class FileManager {
       }
     });
     if (results.map((result) => result.status === "fulfilled").indexOf !== -1) {
-      this.fileTable.showLoading(true);
+      this.fileTable.showLoading();
       this.fetchFiles();
     }
     this.fileForm.toggleSubmitButton(false);

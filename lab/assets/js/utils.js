@@ -18,7 +18,7 @@ export function displayMessage(message, tag) {
       : event.target.parentElement
     ).remove()
   );
-  document.querySelector("ul.messagelist").appendChild(messageElement);
+  document.querySelector("ul.messagelist")?.appendChild(messageElement);
 }
 
 export function formatBytes(a, b = 2, k = 1024) {

@@ -71,6 +71,8 @@ export class FileUploadForm extends HTMLFormElement {
       .map((file) => file.size)
       .reduce((size, nextSize) => size + nextSize);
 
+    fileInput.setCustomValidity("");
+
     if (totalSize > FILES_MAX_SIZE) {
       fileInput.setCustomValidity(
         window.interpolate(
@@ -79,8 +81,6 @@ export class FileUploadForm extends HTMLFormElement {
         )
       );
       return;
-    } else {
-      fileInput.setCustomValidity("");
     }
     const notSupportedFormats = Array.from(files)
       .map((file) => file.name.split(".").pop()?.toLowerCase())
@@ -93,8 +93,6 @@ export class FileUploadForm extends HTMLFormElement {
         )
       );
       return;
-    } else {
-      fileInput.setCustomValidity("");
     }
   }
 

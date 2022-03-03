@@ -1,5 +1,5 @@
 "use strict";
-
+import { formatBytes } from "./utils.js";
 export class S3Service {
   constructor(presignedUrlService) {
     this.presignedUrlService = presignedUrlService;
@@ -15,7 +15,7 @@ export class S3Service {
         await response.text(),
         "application/xml"
       );
-      return xml.querySelectorAll("Contents");
+      return serializeS3ListObjectsV2Contents(xml.querySelectorAll("Contents"));
     } else {
       throw new Error(
         `Failed to fetch document list. Response status: ${response.status}`
@@ -74,4 +74,28 @@ class S3FileUploadError extends Error {
     super(`Failed to upload document. Response status: ${response.status}`);
     this.file = file;
   }
+}
+
+export class S3File {
+  constructor(key, lastModified, size) {
+    this.name = key.split("/").pop();
+    this.key = key;
+    this.lastModified = lastModified;
+    this.size = size;
+  }
+}
+
+export function serializeS3ListObjectsV2Contents(xmlContents) {
+  return Array.from(xmlContents).map(
+    (documentEl) =>
+      new S3File(
+        decodeURIComponent(documentEl.querySelector("Key").textContent),
+        new Date(
+          documentEl.querySelector("LastModified").textContent
+        ).toLocaleDateString(),
+        formatBytes(
+          parseInt(documentEl.querySelector("Size").textContent || "0")
+        )
+      )
+  );
 }

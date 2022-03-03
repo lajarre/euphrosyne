@@ -2,19 +2,16 @@
 <table is="file-table" data-can-delete="{{ component.can_delete|yesno:"true,false" }}" {% if component.attrs %}{% include "attrs.html" with attrs=component.attrs %}{% endif %}>
     <thead>
         <tr>  
-            <th scope="col" class="column-name">
+            <th scope="col">
                 <div class="text">{% trans "File name" %}</div>
-                <div class="clear"></div>
             </th>
-            <th scope="col" class="column-name">
-                    <div class="text">{% trans "Last modified" %}</div>
-                    <div class="clear"></div>
+            <th scope="col">
+                <div class="text">{% trans "Last modified" %}</div>
             </th>
-            <th scope="col" class="column-name">
-                    <div class="text">{% trans "Size" %}</div>
-                    <div class="clear"></div>
+            <th scope="col">
+                <div class="text">{% trans "Size" %}</div>
             </th>
-            <th scope="col" class="column-name"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>

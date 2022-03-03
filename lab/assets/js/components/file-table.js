@@ -9,11 +9,9 @@ export class FileTable extends HTMLTableElement {
     customElements.define("file-table", FileTable, { extends: "table" });
   }
 
-  showLoading(active) {
-    if (active) {
-      this.tBodies[0].querySelectorAll("tr").forEach((row) => row.remove());
-      this.tBodies[0].appendChild(this.generateLoadingRow());
-    }
+  showLoading() {
+    this.tBodies[0].querySelectorAll("tr").forEach((row) => row.remove());
+    this.tBodies[0].appendChild(this.generateLoadingRow());
   }
 
   displayFiles() {
@@ -67,7 +65,7 @@ export class FileTable extends HTMLTableElement {
   generateNoDataRow() {
     const cell = document.createElement("td");
     cell.textContent = window.gettext("No file yet");
-    cell.setAttribute("colspan", "4");
+    cell.setAttribute("colspan", this.tHead.querySelectorAll("th").length);
     const row = document.createElement("tr");
     row.classList.add("no_data");
     row.appendChild(cell);
